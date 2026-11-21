@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishDetect AI - QR Code</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #050811;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+    input {
+      width: 280px;
+      max-width: 85vw;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #050811;
+      color: #fff;
+      outline: none;
+    }
+    input:focus {
+      border-color: #38bdf8;
+    }
+    #qrcode {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 12px;
+    }
+    button {
+      background: #38bdf8;
+      color: #050811;
+      font-weight: 600;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #7dd3fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>PhishDetect AI QR Code</h2>
+    <input id="urlInput" type="text" value="https://example.com/phishdetect" placeholder="Enter your hosted URL" />
+    <div id="qrcode"></div>
+    <button id="downloadBtn">Download QR</button>
+  </div>
+
+  <script>
+    const qrContainer = document.getElementById("qrcode");
+    const input = document.getElementById("urlInput");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    function generateQR(text) {
+      qrContainer.innerHTML = "";
+      new QRCode(qrContainer, {
+        text: text || "https://example.com",
+        width: 200,
+        height: 200,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    // Initial QR
+    generateQR(input.value);
+
+    // Live update on typing
+    input.addEventListener("input", () => {
+      generateQR(input.value.trim());
+    });
+
+    // Download functionality
+    downloadBtn.addEventListener("click", () => {
+      const img = qrContainer.querySelector("img");
+      const canvas = qrContainer.querySelector("canvas");
+      const url = img && img.src ? img.src : canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "PhishDetect-QR.png";
+      link.click();
+    });
+  </script>
+</body>
+</html>
